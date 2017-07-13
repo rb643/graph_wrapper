@@ -64,12 +64,10 @@ for i = 1:nSubjects
     
     A = squeeze(Adj(:,:,i));
     A = (A+A')./2.;
-    th=prctile((A(:)),90); 
+    
     % threshold
     for c = 1:length(cost)
     waitbar(c/length(cost));
-    th=prctile((A(:)),100-(cost(c)*100));
-    A = (A>th);
     A = mst_threshold(A,cost(c),'T');
     % get some random matrices for normalization later
     for iR = 1:nRand
