@@ -1,2 +1,2 @@
 # graph_wrapper
-wrapper functions for graph analyses
+set of wrapper functions for graph analyses mostly using the BCT toolbox
