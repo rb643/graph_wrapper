@@ -49,7 +49,7 @@ addOptional(p,'cost',[0:0.05:0.3], @isnumeric);
 parse(p,varargin{:});
 % then set/get all the inputs out of this structure
 nRand = p.Results.nRand; regionLabels = p.Results.regionLabels; PlotLocal = p.Results.PlotLocal; PlotGlobal = p.Results.PlotGlobal; groups = p.Results.groups; Adj = p.Results.Matrix;
-cost = p.Results.cost; PlotMatrices = p.Results.PlotMatrices; ; plotCost = p.Results.PlotCost;
+cost = p.Results.cost; PlotMatrices = p.Results.PlotMatrices; plotCost = p.Results.PlotCost;
 
 % set the larger defaults in case they are not specified
 if isempty(groups); groups = round(rand(1,size(Adj,3))*3)'; end % generate some random numbers
