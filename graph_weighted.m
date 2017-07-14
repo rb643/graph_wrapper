@@ -90,6 +90,10 @@ for i = 1:nSubjects
 end
 close(h)
 
+% get some dimensions for subplots based on groupsize
+dim1 = length(unique(groups));
+dim2 = ceil(sqrt(dim1));
+
 if PlotGlobal == 1
     figure;
     subplot(2,2,1); boxplot(wResult.dens,groups,'colorgroup',groups);title('density');
@@ -99,48 +103,51 @@ if PlotGlobal == 1
     
     ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
     text(0.5, 1,'\bf Weighted Networks','HorizontalAlignment','center','VerticalAlignment', 'top');
+    
 end
 
 if PlotLocal == 1
-    figure;
-    subplot(4,1,1); bar(mean(wResult.strength(groups == 0,:)),'FaceColor',[0 .5 .5],'EdgeColor',[0 .9 .9],'LineWidth',1); set(gca,'XTick',1:1:(length(regionLabels)),'XLim',[0 (length(regionLabels)+1)],'XTickLabel',regionLabels, 'XTickLabelRotation',90, 'Fontsize', 10); ylabel('Group 0'); title('Strength');
-    subplot(4,1,2); bar(mean(wResult.strength(groups == 1,:)),'FaceColor',[0 .5 .5],'EdgeColor',[0 .9 .9],'LineWidth',1); set(gca,'XTick',1:1:(length(regionLabels)),'XLim',[0 (length(regionLabels)+1)],'XTickLabel',regionLabels, 'XTickLabelRotation',90, 'Fontsize', 10); ylabel('Group 1');
-    subplot(4,1,3); bar(mean(wResult.strength(groups == 2,:)),'FaceColor',[0 .5 .5],'EdgeColor',[0 .9 .9],'LineWidth',1); set(gca,'XTick',1:1:(length(regionLabels)),'XLim',[0 (length(regionLabels)+1)],'XTickLabel',regionLabels, 'XTickLabelRotation',90, 'Fontsize', 10); ylabel('Group 2');
-    subplot(4,1,4); bar(mean(wResult.strength(groups == 3,:)),'FaceColor',[0 .5 .5],'EdgeColor',[0 .9 .9],'LineWidth',1); set(gca,'XTick',1:1:(length(regionLabels)),'XLim',[0 (length(regionLabels)+1)],'XTickLabel',regionLabels, 'XTickLabelRotation',90, 'Fontsize', 10); ylabel('Group 3');
+    figure; hold on;
+    
+    for p = 1:dim1
+        subplot(dim1,1,p); 
+            bar(mean(wResult.strength(groups == (p-1),:)),...
+            'FaceColor',[0 .5 .5],'EdgeColor',[0 .9 .9],'LineWidth',1); set(gca,'XTick',1:1:(length(regionLabels)),...
+            'XLim',[0 (length(regionLabels)+1)],'XTickLabel',regionLabels, 'XTickLabelRotation',90, 'Fontsize',...
+            10); ylabel(num2str(p-1)); title('Strength');
+    end
+    hold off
 end
 
 if PlotMatrices == 1
-    dim1 = length(unique(groups));
-    dim2 = ceil(sqrt(dim1));
-    
     figure; hold on;
     for p = 1:dim1
         mat = zscore(squeeze(mean(Adj(:,:,(groups == p-1)),3)));
         
         subplot(dim1,ceil(dim1/dim2),p);
         imagesc(mat);            % Create a colored plot of the matrix values
-        title(strcat('Mean connection probability for Group: ',num2str(p)));
+        title(strcat('Mean connection probability for Group: ',num2str(p-1)));
         colormap(parula);  % Change the colormap to gray (so higher values are
         %#   black and lower values are white)
         c = colorbar; ylabel(c,'connection probability z-score ')
-               
-%         textStrings = num2str(mat(:),'%0.2f');  %# Create strings from the matrix values
-%         textStrings = strtrim(cellstr(textStrings));  %# Remove any space padding
-%         [x,y] = meshgrid(1:size(mat,1));   %# Create x and y coordinates for the strings
-%         hStrings = text(x(:),y(:),textStrings(:),...      %# Plot the strings
-%             'HorizontalAlignment','center');
-%         midValue = mean(get(gca,'CLim'));  %# Get the middle value of the color range
-%         textColors = repmat(mat(:) > midValue,1,3);  %# Choose white or black for the
-%         %#   text color of the strings so
-%         %#   they can be easily seen over
-%         %#   the background color
-%         set(hStrings,{'Color'},num2cell(textColors,2));  %# Change the text colors
-%         
-%         set(gca,'XTick',1:size(mat,1),...                         %# Change the axes tick marks
-%             'XTickLabel',regionLabels,...  %#   and tick labels
-%             'YTick',1:size(mat,1),...
-%             'YTickLabel',regionLabels,...
-%             'TickLength',[0 0]);
+        
+        %         textStrings = num2str(mat(:),'%0.2f');  %# Create strings from the matrix values
+        %         textStrings = strtrim(cellstr(textStrings));  %# Remove any space padding
+        %         [x,y] = meshgrid(1:size(mat,1));   %# Create x and y coordinates for the strings
+        %         hStrings = text(x(:),y(:),textStrings(:),...      %# Plot the strings
+        %             'HorizontalAlignment','center');
+        %         midValue = mean(get(gca,'CLim'));  %# Get the middle value of the color range
+        %         textColors = repmat(mat(:) > midValue,1,3);  %# Choose white or black for the
+        %         %#   text color of the strings so
+        %         %#   they can be easily seen over
+        %         %#   the background color
+        %         set(hStrings,{'Color'},num2cell(textColors,2));  %# Change the text colors
+        %
+        %         set(gca,'XTick',1:size(mat,1),...                         %# Change the axes tick marks
+        %             'XTickLabel',regionLabels,...  %#   and tick labels
+        %             'YTick',1:size(mat,1),...
+        %             'YTickLabel',regionLabels,...
+        %             'TickLength',[0 0]);
         
         
     end
