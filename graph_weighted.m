@@ -88,6 +88,7 @@ for i = 1:nSubjects
     
     [wResult.mask(i,:), wResult.net(:,:,i)] = getTop(wResult.deg(i,:),A,percentage);
 end
+close(h)
 
 if PlotGlobal == 1
     figure;
@@ -118,12 +119,11 @@ if PlotMatrices == 1
         
         subplot(dim1,ceil(dim1/dim2),p);
         imagesc(mat);            % Create a colored plot of the matrix values
-        title(strcat('Group: ',num2str(p)));
+        title(strcat('Mean connection probability for Group: ',num2str(p)));
         colormap(parula);  % Change the colormap to gray (so higher values are
         %#   black and lower values are white)
-        colorbar;
-        
-        
+        c = colorbar; ylabel(c,'connection probability z-score ')
+               
 %         textStrings = num2str(mat(:),'%0.2f');  %# Create strings from the matrix values
 %         textStrings = strtrim(cellstr(textStrings));  %# Remove any space padding
 %         [x,y] = meshgrid(1:size(mat,1));   %# Create x and y coordinates for the strings
@@ -144,6 +144,7 @@ if PlotMatrices == 1
         
         
     end
+    hold off
     
 end
 
