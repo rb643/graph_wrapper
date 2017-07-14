@@ -125,7 +125,7 @@ if PlotGlobal == 1
 figure;
     subplot(2,2,1); boxplot((squeeze(Result.strength(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('strength');legend;
     subplot(2,2,2); boxplot((squeeze(Result.cpl(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('characteristic path length');
-    subplot(2,2,3); boxplot((squeeze(Result.clustcoeff(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('clustering');
+    subplot(2,2,3); boxplot((squeeze(Result.deg(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('degree');
     subplot(2,2,4); boxplot((squeeze(Result.trans(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('transitivity');
     
     ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
