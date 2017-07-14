@@ -43,7 +43,7 @@ addOptional(p,'percentage',0.1, @isnumeric);
 % parse the input
 parse(p,varargin{:});
 % then set/get all the inputs out of this structure
-nRand = p.Results.nRand; regionLabels = p.Results.regionLabels; PlotLocal = p.Results.PlotLocal; PlotGlobal = p.Results.PlotGlobal; groups = p.Results.groups; Adj = p.Results.Matrix;
+nRand = p.Results.nRand; regionLabels = p.Results.regionLabels; PlotLocal = p.Results.PlotLocal; PlotGlobal = p.Results.PlotGlobal; prev = p.Results.prev; groups = p.Results.groups; Adj = p.Results.Matrix;
 cost = p.Results.cost; PlotMatrices = p.Results.PlotMatrices; percentage = p.Results.percentage;
 
 % set the larger defaults in case they are not specified
