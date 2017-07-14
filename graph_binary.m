@@ -2,8 +2,9 @@ function [Result p] = graph_binary(Matrix,varargin)
 %
 % For example:
 % [Result p] = graph_binary('Matrix',adjacencymatrix);
-% [Result p] = graph_binary('Matrix',adjacencymatrix,'regionLabels',regions,'prev',0.75,'PlotLocal',1,'PlotGlobal',...
-%                                   1,'nos',10, 'subjectmask',include, 'groups', groups, 'cost', [0:0.01:0.3]);
+% [Result p] = graph_binary('Matrix',adjacencymatrix,'regionLabels',regions,...
+%                                   1'nRand',100, 'subjectmask',include, 'groups',...
+%                                   groups, 'cost', [0:0.01:0.3]);
 %
 % ---------------------------- INPUT ----------------------------
 %
@@ -12,10 +13,9 @@ function [Result p] = graph_binary(Matrix,varargin)
 % --------------------- OPTIONAL ARGUMENTS ----------------------
 %
 % regionLabels      -       A cell structure containing names of all nodes in your matrix (at this point its not really used)
-% nRand             -       number of randomizations used in random networks for normalization (default = 10)
-% prev              -       prevalence for prevalence weighted matrices  (default = 0.75)
+% nRand             -       number of randomizations used in random networks for normalization (default = 100)
 % groups            -       1D vector with grouplabels  (default = random)
-% cost              -       range of costs (default = [0:0.05:0.3])
+% cost              -       range of costs (default = [0:0.02:0.3])
 % percentage        -       threshold for getting the top degree nodes (default = 0.1)
 %
 % ---------------------------- OUTPUT ----------------------------
@@ -31,14 +31,20 @@ p.Results;
 p.KeepUnmatched = true;
 % set the desired and optional input arguments
 addRequired(p,'Matrix',@isnumeric);
+<<<<<<< HEAD
 addOptional(p,'regionLabels',[],@iscell);
 addOptional(p,'nRand',10,@isnumeric);
 addOptional(p,'PlotLocal',0,@isnumeric);
 addOptional(p,'PlotGlobal',0,@isnumeric);
 addOptional(p,'PlotMatrices',0,@isnumeric);
 addOptional(p,'groups',[], @isnumeric);
+=======
+addOptional(p,'regionLabels',regionsdefault,@iscell);
+addOptional(p,'nRand',100,@isnumeric);
+addOptional(p,'PlotMatrices',0,@isnumeric);
+addOptional(p,'groups',groupdefault, @isnumeric);
+>>>>>>> origin/master
 addOptional(p,'cost',[0:0.05:0.3], @isnumeric);
-addOptional(p,'percentage',0.1, @isnumeric);
 
 % parse the input
 parse(p,varargin{:});
