@@ -2,8 +2,10 @@ function [wResult p] = graph_weighted(Matrix,varargin)
 %
 % For example:
 % [wResult p] = graph_weighted('Matrix',adjacencymatrix);
-% [wResult p] = graph_weighted('Matrix',adjacencymatrix,'regionLabels',regions,'PlotLocal',1,'PlotGlobal', 1,...
-%            `                       'subjectmask',include, 'groups', groups, 'nRand', 100);
+% [wResult p] = graph_weighted('Matrix',matrix,'regionLabels',...
+%               region,'PlotLocal',1,'PlotGlobal', 1, 'groups',...
+%               groups, 'nRand', 200, 'filelist', filelist,...
+%               'percentage', 0.1,'PlotMatrices',1);
 %
 % ---------------------------- INPUT ----------------------------
 %
@@ -23,7 +25,6 @@ function [wResult p] = graph_weighted(Matrix,varargin)
 %
 % ---------------------------- OUTPUT ----------------------------
 % wResult           -       Graph metrics from weighted matrices based on NOS
-% 
 % p                 -       Also return all the input settings to check
 
 %% check all the inputs and if they do not exist then revert to default settings
