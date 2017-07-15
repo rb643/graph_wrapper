@@ -48,7 +48,7 @@ addOptional(p,'percentage',0.1, @isnumeric);
 parse(p,varargin{:});
 % then set/get all the inputs out of this structure
 nRand = p.Results.nRand; regionLabels = p.Results.regionLabels; PlotLocal = p.Results.PlotLocal; PlotGlobal = p.Results.PlotGlobal; groups = p.Results.groups; Adj = p.Results.Matrix;
-PlotMatrices = p.Results.PlotMatrices; subjectmask = p.Results.subjectmask; percentage = p.Results.percentage; filenames = p.Results.filelist;
+PlotMatrices = p.Results.PlotMatrices; subjectmask = p.Results.subjectmask; percentage = p.Results.percentage; filelist = p.Results.filelist;
 
 % set the larger defaults in case they are not specified
 if isempty(groups); groups = round(rand(1,size(Adj,3))*3)'; end % generate some random numbers
@@ -101,10 +101,11 @@ close(h)
 
 %% generate groupwise tables
 for g = 1:length(unique(groups));
-    varname = strcat('T',num2str(g-1));
-    wResult.(varname) = table(squeeze(wResult.deg((groups == g-1),:)),squeeze(wResult.strength((groups == g-1),:)),...
-        'VariableNames',{'degree','strength'},...
-        'RowNames', filelist(groups == g-1)');   
+    varname = strcat('T',num2str(g));
+    wResult.(varname) = table(squeeze(wResult.deg((groups == g),:)),squeeze(wResult.strength((groups == g),:)),...
+        squeeze(wResult.M((groups == g),:)),squeeze(wResult.part((groups == g),:)),...
+        'VariableNames',{'degree','strength','modularity','participation'},...
+        'RowNames', filelist(groups == g)');   
 end
 
 % get some dimensions for subplots based on groupsize
@@ -113,10 +114,10 @@ dim2 = ceil(sqrt(dim1));
 
 if PlotGlobal == 1
     figure;
-    subplot(2,2,1); boxplot((squeeze(Result.strength(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('strength');legend;
-    subplot(2,2,2); boxplot((squeeze(Result.cpl(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('characteristic path length');
-    subplot(2,2,3); boxplot((squeeze(Result.deg(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('degree');
-    subplot(2,2,4); boxplot((squeeze(Result.trans(:,plotCost,:))'),groups,'colorgroup',1:length(unique(groups)));title('transitivity');
+    subplot(2,2,1); boxplot((squeeze(wResult.strength(:,:))'),groups,'colorgroup',1:length(unique(groups)));title('strength');legend;
+    subplot(2,2,2); boxplot((squeeze(wResult.cpl(:,:))'),groups,'colorgroup',1:length(unique(groups)));title('characteristic path length');
+    subplot(2,2,3); boxplot((squeeze(wResult.deg(:,:))'),groups,'colorgroup',1:length(unique(groups)));title('degree');
+    subplot(2,2,4); boxplot((squeeze(wResult.trans(:,:))'),groups,'colorgroup',1:length(unique(groups)));title('transitivity');
     
     ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
     text(0.5, 1,'\bf Weighted Networks','HorizontalAlignment','center','VerticalAlignment', 'top');
@@ -128,10 +129,10 @@ if PlotLocal == 1
     
     for p = 1:dim1
         subplot(dim1,1,p); 
-            bar(mean(wResult.strength(groups == (p-1),:)),...
+            bar(mean(wResult.strength(groups == (p),:)),...
             'FaceColor',[0 .5 .5],'EdgeColor',[0 .9 .9],'LineWidth',1); set(gca,'XTick',1:1:(length(regionLabels)),...
             'XLim',[0 (length(regionLabels)+1)],'XTickLabel',regionLabels, 'XTickLabelRotation',90, 'Fontsize',...
-            10); ylabel(num2str(p-1)); title('Strength');
+            10); ylabel(num2str(p)); title('Strength');
     end
     hold off
 end
@@ -139,11 +140,11 @@ end
 if PlotMatrices == 1
     figure; hold on;
     for p = 1:dim1
-        mat = zscore(squeeze(mean(Adj(:,:,(groups == p-1)),3)));
+        mat = zscore(squeeze(mean(Adj(:,:,(groups == p)),3)));
         
         subplot(dim1,ceil(dim1/dim2),p);
         imagesc(mat);            % Create a colored plot of the matrix values
-        title(strcat('Mean connection probability for Group: ',num2str(p-1)));
+        title(strcat('Mean connection probability for Group: ',num2str(p)));
         colormap(parula);  % Change the colormap to gray (so higher values are
         %#   black and lower values are white)
         c = colorbar; ylabel(c,'connection probability z-score ')
